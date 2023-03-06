@@ -2,13 +2,14 @@ import './App.css';
 import io from "socket.io-client";
 import { useEffect, useState } from "react";
 
-const socket = io.connect("http://localhost:1234");
+const socket = io.connect("https://wordliar.adaptable.app");
 
 function App() {
   const [room, setRoom] = useState("");
   const [clientsCount, setClientsCount] = useState("");
   const [message, setMessage] = useState("");
   const [messageReceived, setMessageReceived] = useState("");
+  const [bossNotifiedMessage, setBossNotifiedMessage] = useState("");
 
   const joinRoom = () => {
     socket.emit("join_room", room );
@@ -24,6 +25,9 @@ function App() {
     });
     socket.on("clients_count", (data) => {
       setClientsCount(data);
+    });
+    socket.on("boss_notified", (data) => {
+      setBossNotifiedMessage(data);
     });
   }, [socket]);
 
@@ -41,6 +45,9 @@ function App() {
       {clientsCount}
       <h2>Message :</h2>
       {messageReceived}
+      <div>
+      {bossNotifiedMessage && <h3>{bossNotifiedMessage}</h3>}
+    </div>
     </div>
   );
 }
