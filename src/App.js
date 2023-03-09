@@ -1,55 +1,16 @@
-import './App.css';
-import io from "socket.io-client";
-import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Game from "./pages/Game";
 
-const socket = io.connect("https://wordliar.adaptable.app");
-
-function App() {
-  const [room, setRoom] = useState("");
-  const [clientsCount, setClientsCount] = useState("");
-  const [message, setMessage] = useState("");
-  const [messageReceived, setMessageReceived] = useState("");
-  const [bossNotifiedMessage, setBossNotifiedMessage] = useState("");
-
-  const joinRoom = () => {
-    socket.emit("join_room", room );
-  };
-
-  const sendMessage = () => {
-    socket.emit("send_message", { message, room });
-  };
-
-  useEffect(() => {
-    socket.on("receive_message", (data) => {
-      setMessageReceived(data.message);
-    });
-    socket.on("clients_count", (data) => {
-      setClientsCount(data);
-    });
-    socket.on("boss_notified", (data) => {
-      setBossNotifiedMessage(data);
-    });
-  }, [socket]);
-
+export default function App() {
   return (
-    <div className="App">
-      <input placeholder='Room...' onChange={(event) => {
-        setRoom(event.target.value);
-      }}/>
-      <button onClick={joinRoom}>Join Room</button>
-      <input placeholder='Message...' onChange={(event) => {
-        setMessage(event.target.value);
-      }}/>
-      <button onClick={sendMessage}>Send Message</button>
-      <h1>Nombre de joueurs : </h1>
-      {clientsCount}
-      <h2>Message :</h2>
-      {messageReceived}
-      <div>
-      {bossNotifiedMessage && <h3>{bossNotifiedMessage}</h3>}
-    </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/">
+          <Route index element={<Home />} />
+          <Route path="game" element={<Game />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;
