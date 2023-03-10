@@ -1,0 +1,22 @@
+@import "../../App.css";
+
+.home {
+    margin-inline: 20px;
+    margin-top: 15px;
+}
+
+.joinRoom {
+    width: 50px;
+    color: #3A4F41;
+    padding: 8px;
+    border-radius: 5px;
+    border-color: transparent;
+    margin-right: 5px;
+}
+
+.gameLaunchInfos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
