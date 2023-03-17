@@ -1,9 +1,9 @@
-import './Game.css';
+import './GameRounds.css';
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { socket } from '../../Socket';
 
-function Game() {
+function GameRounds() {
   const [bossNotifiedMessage, setBossNotifiedMessage] = useState("");
   const [roomIn, setRoomIn] = useState("");
   const [clientsCount, setClientsCount] = useState("");
@@ -26,15 +26,16 @@ function Game() {
   }, [socket]);
 
   return (
-    <div className="game">
+    <div className="gameRounds">
        <div className="top">
-          <div>{roomIn && <h3 className="room">Room {roomIn}</h3>}</div>
+          {roomIn && <h3>Room {roomIn}</h3>}
+          {bossNotifiedMessage && <h3>{bossNotifiedMessage}</h3>}
+          {clientsCount && <h3>Players : {clientsCount}</h3>}
           <Link className="link" to="/">Home</Link>
         </div>
-        <div>{bossNotifiedMessage && <h3>{bossNotifiedMessage}</h3>}</div>
-        <div>{clientsCount && <h3>Nombre de joueurs : {clientsCount}</h3>}</div>
+        <h4>Le jeu va commencer</h4>
     </div>
   );
 }
 
-export default Game;
+export default GameRounds;

@@ -1,23 +1,25 @@
 import './Home.css';
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { socket } from '../../Socket';
+import { useNavigate } from "react-router-dom";
+import { ReactComponent as HomeSvg } from '../../assets/fun.svg';
 
 function App() {
+  const navigate = useNavigate();
   const [room, setRoom] = useState("");
   const [roomIn, setRoomIn] = useState("");
   const [clientsCount, setClientsCount] = useState("");
-  const [message, setMessage] = useState("");
-  const [messageReceived, setMessageReceived] = useState("");
   const [bossNotifiedMessage, setBossNotifiedMessage] = useState("");
   const [placeholderJoinRoom, setPlaceholderJoinRoom] = useState("Room...");
+  const [defaultPseudo, setDefaultPseudo] = useState("");
+  const [pseudo, setPseudo] = useState("");
 
   const joinRoom = () => {
-    socket.emit("join_room", room );
+    socket.emit("join_room", {room, pseudo});
   };
 
-  const sendMessage = () => {
-    socket.emit("send_message", { message });
+  const launchGame = () => {
+    socket.emit("launch_game");
   };
 
   const accessPage = () => {
@@ -26,18 +28,31 @@ function App() {
 
   useEffect(() => {
     accessPage();
-    socket.on("receive_message", (data) => {
-      setMessageReceived(data.message);
-    });
+    socket.on("default_pseudo", (data) => {
+      setDefaultPseudo(data);
+      setPseudo(data);
+    })
     socket.on("clients_count", (data) => {
       setClientsCount(data);
     });
     socket.on("boss_notified", (data) => {
-      setBossNotifiedMessage(data);
+      if(data == "Boss") {
+        setBossNotifiedMessage(data);
+      } else {
+        setBossNotifiedMessage("");
+      }
     });
     socket.on("room_response", (data) => {
       setRoomIn(data);
       setPlaceholderJoinRoom(data);
+    });
+    socket.on("room_occupied", (data) => {
+      console.log("occupied");
+      alert(data);
+    });
+    socket.off("game_launched").on("game_launched", () => {
+      console.log("test");
+      navigate("/game_initialization");
     });
   }, [socket]);
 
@@ -50,14 +65,19 @@ function App() {
           }}/>
           <button onClick={joinRoom}>Join</button>
         </div>
+        {!roomIn && <input className="pseudo" placeholder={defaultPseudo} onChange={(event) => {
+            setPseudo(event.target.value);
+            }}/>}
         {roomIn && <h3>Room {roomIn}</h3>}
         {bossNotifiedMessage && <h3>{bossNotifiedMessage}</h3>}
       </div>
-      <div class="gameLaunchInfos">
+      <div className="gameLaunchInfos">
         {clientsCount && <h3>Players : {clientsCount}</h3>}
-        {bossNotifiedMessage && <Link className="link" to="/game">Play</Link>}
+        {bossNotifiedMessage && <button className="link" onClick={launchGame}>Play</button>}
       </div>
-      <br/><br/>
+      <br/>
+      <h1 className='gameName'>F*ck <br/>the liar</h1>
+      <HomeSvg />
     </div>
   );
 }

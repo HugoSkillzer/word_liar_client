@@ -1,0 +1,39 @@
+@import "../../App.css";
+
+.gameInitialization {
+    margin-inline: 20px;
+    margin-top: 15px;
+}
+
+.gameInitializationSpace {
+    margin-top: 80px;
+    width: 100%;
+    flex-direction: column;
+}
+
+.gameInitializationSpace h4, p {
+    text-align: center;
+}
+
+.resumeWordBlock {
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+}
+
+.resumeWord {
+    width: 150px;
+    color: #3A4F41;
+    padding: 8px;
+    border-radius: 5px;
+    border-color: transparent;
+    margin-right: 5px;
+}
+
+.sentButton {
+    background-color: #3A4F41;
+}
+
+.gameInitialization svg {
+    width: 35px;
+}
