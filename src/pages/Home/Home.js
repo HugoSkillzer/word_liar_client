@@ -47,11 +47,9 @@ function App() {
       setPlaceholderJoinRoom(data);
     });
     socket.on("room_occupied", (data) => {
-      console.log("occupied");
       alert(data);
     });
     socket.off("game_launched").on("game_launched", () => {
-      console.log("test");
       navigate("/game_initialization");
     });
   }, [socket]);

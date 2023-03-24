@@ -1,2 +1,74 @@
 @import "../../App.css";
 
+.gameRounds {
+    margin-inline: 20px;
+    margin-top: 15px;
+}
+
+.resumeWordsBlock {
+    margin-top: 40px;
+    padding-block: 10px;
+    border: 5px #B9314F;
+    border-style: solid none;
+}
+
+.resumeWordsBlock h3 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.resumeWords {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.resumeWords div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-inline: 2px;
+}
+
+.resumeWords p {
+    margin-top: 0;
+}
+
+.playNextRoundBlock {
+    margin-top: 15px;
+    display: flex;
+}
+
+.playNextRoundBlock button {
+    margin-left: auto;
+}
+
+.playingArea .voteArea {
+    margin-top: 60px;
+}
+
+.voteTraitorButtons, .voteInnocentButtons {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.voteTraitorButtons button, .voteInnocentButtons button {
+    flex: 1;
+    max-width: 150px;
+    margin-bottom: 5px;
+}
+
+.playingArea h3, h4 {
+    text-align: center;
+    margin-block: 40px;
+}
+
+.wordToGuess {
+   color: #B9314F;
+}
+
+.notVoted {
+    opacity: 0.5;
+}
