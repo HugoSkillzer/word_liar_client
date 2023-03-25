@@ -13,6 +13,7 @@ function App() {
   const [placeholderJoinRoom, setPlaceholderJoinRoom] = useState("Room...");
   const [defaultPseudo, setDefaultPseudo] = useState("");
   const [pseudo, setPseudo] = useState("");
+  const [canPlay, setCanPlay] = useState(false);
 
   const joinRoom = () => {
     socket.emit("join_room", {room, pseudo});
@@ -28,10 +29,14 @@ function App() {
 
   useEffect(() => {
     accessPage();
+    socket.on("can_play", () => {
+      console.log("can play");
+      setCanPlay(true);
+    })
     socket.on("default_pseudo", (data) => {
       setDefaultPseudo(data);
       setPseudo(data);
-    })
+    });
     socket.on("clients_count", (data) => {
       setClientsCount(data);
     });
@@ -71,7 +76,7 @@ function App() {
       </div>
       <div className="gameLaunchInfos">
         {clientsCount && <h3>Players : {clientsCount}</h3>}
-        {bossNotifiedMessage && <button className="link" onClick={launchGame}>Play</button>}
+        {bossNotifiedMessage && canPlay && <button className="link" onClick={launchGame}>Play</button>}
       </div>
       <br/>
       <h1 className='gameName'>F*ck <br/>the liar</h1>

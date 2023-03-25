@@ -34,12 +34,12 @@
     margin-top: 0;
 }
 
-.playNextRoundBlock {
+.playNextBlock {
     margin-top: 15px;
     display: flex;
 }
 
-.playNextRoundBlock button {
+.playNextBlock button {
     margin-left: auto;
 }
 
@@ -71,4 +71,9 @@
 
 .notVoted {
     opacity: 0.5;
+}
+
+.playNextBlock button:disabled {
+    opacity: 0.5;
+    cursor: default;
 }

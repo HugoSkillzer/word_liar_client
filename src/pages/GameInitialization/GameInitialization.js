@@ -24,6 +24,11 @@ function GameInitialization() {
     setIsResumeWordSent(true);
   };
 
+  const goHome = () => {
+    socket.emit("disconnect_from_game");
+    navigate("/");
+  }
+
   useEffect(() => {
     accessPage();
     socket.on("clients_count", (data) => {
@@ -44,6 +49,10 @@ function GameInitialization() {
     socket.on("play_game", () => {
       navigate("/game_rounds");
     });
+    socket.on("no_enough_player", () => {
+      alert("Game ended because there is not enough players");
+      goHome();
+    })
   }, [socket]);
 
   return (
@@ -52,7 +61,7 @@ function GameInitialization() {
           {roomIn && <h3>Room {roomIn}</h3>}
           {bossNotifiedMessage && <h3>{bossNotifiedMessage}</h3>}
           {clientsCount && <h3>Players : {clientsCount}</h3>}
-          <Link className="link" to="/">Home</Link>
+          <button onClick={goHome}>Home</button>
         </div>
         {myWords &&
           <div className="gameInitializationSpace">

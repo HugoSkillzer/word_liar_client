@@ -17,6 +17,8 @@ function GameRounds() {
   const [traitor, setTraitor] = useState("");
   const [innocent, setInnocent] = useState("");
   const [secretWordsOpened, setSecretWordsOpened] = useState(false);
+  const [lastRound, setLastRound] = useState(false);
+  const [noInnocentVote, setNoInnocentVote] = useState(false);
 
   const accessPage = () => {
     socket.emit("access_page");
@@ -32,16 +34,20 @@ function GameRounds() {
     event.target.classList.remove("notVoted");
     setIsTraitorVoted(true);
     setTraitor(event.target.innerText);
+    if(noInnocentVote === true) {
+      console.log("pas d'innocent");
+      setInnocent("personne");
+    }
  }
 
   const handleClickInnocent = (event) => {
     var elems = document.querySelectorAll('.voteInnocentButtons button');
-      elems.forEach(elem => {
-        elem.classList.add('notVoted');
-        elem.disabled = true;
-      })
-      event.target.classList.remove("notVoted");
-      setInnocent(event.target.innerText);
+    elems.forEach(elem => {
+      elem.classList.add('notVoted');
+      elem.disabled = true;
+    })
+    event.target.classList.remove("notVoted");
+    setInnocent(event.target.innerText);
   }
 
   const displayOrNotDisplaySecretWords = () => {
@@ -52,12 +58,23 @@ function GameRounds() {
     }
   }
 
+  const disableNextButton = (choice) => {
+    var elems = document.querySelectorAll('.playNextBlock button');
+    elems.forEach(elem => {
+      elem.disabled = choice;
+    })
+  }
+
   const gameRoundsInit = () => {
     socket.emit("game_rounds_init");
   }
 
   const playNextRound = () => {
     socket.emit("play_next_round");
+  }
+
+  const showResults = () => {
+    socket.emit("show_results");
   }
 
   const sendVotes = () => {
@@ -92,12 +109,17 @@ function GameRounds() {
       setResumeWords(dataParsed);
     });
     socket.on("round_number", (data) => {
+      disableNextButton(true);
       setIsTraitorVoted(false);
       setWordToGuess("")
       setOtherPlayers([]);
       setTraitor("");
       setInnocent("");
-      setRoundNumber(data);
+      if(data != "end") {
+        setRoundNumber(data);
+      } else {
+        setLastRound(true);
+      }
     });
     socket.on("word_to_guess", (data) => {
       setWordToGuess(data);
@@ -108,6 +130,16 @@ function GameRounds() {
     socket.on("other_players", (data) => {
       setOtherPlayers(data);
     });
+    socket.on("vote_complete", () => {
+      disableNextButton(false);
+    });
+    socket.on("no_innocent_vote", () => {
+      setNoInnocentVote(true);
+    })
+    socket.on("no_enough_player", () => {
+      alert("Game ended because there is not enough players");
+      goHome();
+    })
   }, [socket]);
 
   return (
@@ -129,9 +161,10 @@ function GameRounds() {
               ))}
           </div>}
         </div>
-        <div className='playNextRoundBlock'>
+        <div className='playNextBlock'>
           {roundNumber && <h3>Round {roundNumber}</h3>}
-          {bossNotifiedMessage && <button className="playNextRound" onClick={playNextRound}>Next Round</button>}
+          {!lastRound && bossNotifiedMessage && <button className="playNextRound" onClick={playNextRound}>Next Round</button>}
+          {lastRound && <button className="showResults" onClick={showResults}>Show results</button>}
         </div>
         {wordToGuess &&<div className='playingArea'>
           <h3>The word to guess is : </h3>
@@ -144,7 +177,7 @@ function GameRounds() {
                 <button onClick={e => handleClickTraitor(e)}>{player}</button>
               ))}
             </div>
-            {isTraitorVoted && <div>
+            {!noInnocentVote && isTraitorVoted && <div>
               <h4>Vote for the person it's absolutely not</h4>
               <div className='voteInnocentButtons'>
                 {otherPlayers.map((player) => (
