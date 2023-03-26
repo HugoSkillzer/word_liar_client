@@ -140,6 +140,9 @@ function GameRounds() {
       alert("Game ended because there is not enough players");
       goHome();
     })
+    socket.on("go_to_results", () => {
+      navigate("/results");
+    });
   }, [socket]);
 
   return (
@@ -164,7 +167,7 @@ function GameRounds() {
         <div className='playNextBlock'>
           {roundNumber && <h3>Round {roundNumber}</h3>}
           {!lastRound && bossNotifiedMessage && <button className="playNextRound" onClick={playNextRound}>Next Round</button>}
-          {lastRound && <button className="showResults" onClick={showResults}>Show results</button>}
+          {lastRound && bossNotifiedMessage && <button className="showResults" onClick={showResults}>Show results</button>}
         </div>
         {wordToGuess &&<div className='playingArea'>
           <h3>The word to guess is : </h3>

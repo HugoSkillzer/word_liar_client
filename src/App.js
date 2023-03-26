@@ -4,6 +4,7 @@ import WebFont from 'webfontloader';
 import { useEffect } from "react";
 import GameInitialization from "./pages/GameInitialization/GameInitialization";
 import GameRounds from "./pages/GameRounds/GameRounds";
+import Results from "./pages/Results/Results";
 
 export default function App() {
   useEffect(() => {
@@ -21,6 +22,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="game_initialization" element={<GameInitialization />} />
           <Route path="game_rounds" element={<GameRounds />} />
+          <Route path="results" element={<Results />} />
         </Route>
       </Routes>
     </BrowserRouter>

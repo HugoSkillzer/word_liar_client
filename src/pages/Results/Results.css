@@ -1,0 +1,39 @@
+@import "../../App.css";
+
+.results {
+    margin-inline: 20px;
+    margin-top: 15px;
+}
+
+.ranking {
+    display: flex;
+    flex-direction: column;
+    margin-top: 80px;
+}
+
+.ranking h3 {
+    text-align: center;
+}
+
+.ranking p, h4 {
+    display: flex;
+    justify-content: space-around;
+}
+
+.rank {
+    width: 50px;
+    overflow: hidden;
+    text-align: right;
+}
+
+.player {
+    width: 150px;
+    overflow: hidden;
+    text-align: left;
+}
+
+.points {
+    width: 100px;
+    overflow: hidden;
+    text-align: left;
+}
